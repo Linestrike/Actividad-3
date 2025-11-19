@@ -4,7 +4,6 @@
 #include <omp.h>
 #include "image_processing.h"
 
-// Lista de archivos BMP a procesar
 const char *FILENAMES[30] = {
     "1.bmp", "2.bmp", "3.bmp", "4.bmp", "5.bmp", "6.bmp", "7.bmp", "8.bmp", "9.bmp", "10.bmp",
     "11.bmp", "12.bmp", "13.bmp", "14.bmp", "15.bmp", "16.bmp", "17.bmp", "18.bmp", "19.bmp", "20.bmp",
@@ -12,9 +11,8 @@ const char *FILENAMES[30] = {
 };
 
 int main() {
-    omp_set_num_threads(800); // Ajusta al número real de núcleos!
+    omp_set_num_threads(800);
 
-    // Rutas de carpetas para entrada/salida
     const char *ruta_entrada = "Imagenes/";
     const char *ruta_salida1 = "ByN/";
     const char *ruta_salida2 = "Rotacion/";
@@ -29,7 +27,6 @@ int main() {
         char input_path[MAX_PATH], output_gris[MAX_PATH], output_invV[MAX_PATH], output_invH[MAX_PATH], output_blur[MAX_PATH];
         const char *filename = FILENAMES[i];
 
-        // Combina carpetas y nombres, así puedes tener muchas imágenes en subcarpetas
         build_path(input_path, ruta_entrada, filename);
         build_path(output_gris, ruta_salida1, filename);
         build_path(output_invV, ruta_salida2, filename);
@@ -39,9 +36,9 @@ int main() {
         printf("[HILO %d] -> Procesando '%s'\n", omp_get_thread_num(), filename);
 
         bmp_gris(input_path, output_gris);             // Convierte a escala de grises
-        bmp_invertirV(input_path, output_invV);        // Voltea verticalmente
-        bmp_invertirH(input_path, output_invH);        // Espejo horizontal
-        bmp_blur(input_path, output_blur, 57);         // Desenfoque (kernel 57)
+        bmp_invertirV(input_path, output_invV);        // Espejeo
+        bmp_invertirH(input_path, output_invH);        // Rotacion
+        bmp_blur(input_path, output_blur, 57);         // Desenfoque
     }
 
     double end = omp_get_wtime();
